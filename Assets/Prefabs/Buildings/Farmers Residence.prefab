@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 3335296}
   - component: {fileID: 2380978}
   - component: {fileID: 64653524554261828}
-  - component: {fileID: 3668269049429157641}
+  - component: {fileID: 6487709663070670924}
   m_Layer: 0
   m_Name: Farmers Residence
   m_TagString: Untagged
@@ -95,7 +95,7 @@ MeshCollider:
   m_Convex: 1
   m_CookingOptions: 30
   m_Mesh: {fileID: 43743731451361968, guid: ba12df4aa1c1c6a4787afb076f9099bd, type: 2}
---- !u!114 &3668269049429157641
+--- !u!114 &6487709663070670924
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -104,6 +104,8 @@ MonoBehaviour:
   m_GameObject: {fileID: 105272}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e87dadf5d6c75574baed56eb7b9e4e84, type: 3}
+  m_Script: {fileID: 11500000, guid: 5b250dba97e574fc4bd87f9fcae03705, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _workers: []
+  _avHappiness: 0
