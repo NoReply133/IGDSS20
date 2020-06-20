@@ -15,7 +15,9 @@ public abstract class Building : MonoBehaviour
     #region Jobs
     public List<Job> _jobs; // List of all available Jobs. Is populated in Start()
     #endregion
+    
 
+<<<<<<< HEAD
     #region Methods
     // Start is called before the first frame update
     protected virtual void Start()
@@ -33,6 +35,16 @@ public abstract class Building : MonoBehaviour
 
     public void WorkerRemovedFromBuilding(Worker w)
     {
+=======
+    #region Methods   
+    public void WorkerAssignedToBuilding(Worker w)
+    {
+        _workers.Add(w);
+    }
+
+    public void WorkerRemovedFromBuilding(Worker w)
+    {
+>>>>>>> dab145ddf38863e66cb929fcd217aed8c0dd4978
         _workers.Remove(w);
     }
     #endregion
