@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class HouseBuilding : MonoBehaviour
+public class HouseBuilding : Building
 {
     // Start is called before the first frame update
     protected override void Start()

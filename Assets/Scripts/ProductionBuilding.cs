@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class ProductionBuilding : MonoBehaviour
+public class ProductionBuilding : Building
 {
     #region Basic Attributes
     public string _type; //The name of the building

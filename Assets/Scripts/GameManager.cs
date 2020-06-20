@@ -20,7 +20,7 @@ public class GameManager : MonoBehaviour
     #region Buildings
     public GameObject[] _buildingPrefabs; //References to the building prefabs
     public int _selectedBuildingPrefabIndex = 0; //The current index used for choosing a prefab to spawn from the _buildingPrefabs list
-    private List<Building> _buildings; //List of all currently spawned buildings. Used for upkeep in economy ticks
+    private List<ProductionBuilding> _buildings; //List of all currently spawned buildings. Used for upkeep in economy ticks
     #endregion
 
     #region Economy
@@ -77,7 +77,7 @@ public class GameManager : MonoBehaviour
         GenerateMap();
         _mouseManager = MouseManager.Instance;
         _mouseManager.InitializeBounds(0, _heightMap.width * 10, 0, _heightMap.height * 8.66f);
-        _buildings = new List<Building>();
+        _buildings = new List<ProductionBuilding>();
         PopulateResourceDictionary();
     }
 
@@ -334,13 +334,13 @@ public class GameManager : MonoBehaviour
         if (_selectedBuildingPrefabIndex < _buildingPrefabs.Length)
         {
             //check if building can be placed
-            Building buildingType = _buildingPrefabs[_selectedBuildingPrefabIndex].GetComponent<Building>();
+            ProductionBuilding buildingType = _buildingPrefabs[_selectedBuildingPrefabIndex].GetComponent<ProductionBuilding>();
 
             if (t._building == null && _money >= buildingType._buildCostMoney && _resourcesInWarehouse[ResourceTypes.Planks] >= buildingType._buildCostPlanks && buildingType._canBeBuiltOnTileTypes.Contains(t._type))
             {
                 GameObject go = Instantiate(_buildingPrefabs[_selectedBuildingPrefabIndex], t.transform);
                 go.transform.position = t.transform.position;
-                Building b = go.GetComponent<Building>();
+                ProductionBuilding b = go.GetComponent<ProductionBuilding>();
                 b._tile = t;
                 t._building = b;
                 _buildings.Add(b);
