@@ -2,11 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-<<<<<<< HEAD
 public class ProductionBuilding : Building
-=======
-public class Building : MonoBehaviour
->>>>>>> dab145ddf38863e66cb929fcd217aed8c0dd4978
 {
     #region Basic Attributes
     public string _type; //The name of the building
@@ -45,26 +41,16 @@ public class Building : MonoBehaviour
 
     #region MonoBehaviour
     // Start is called before the first frame update
-<<<<<<< HEAD
     protected override void Start()
     {
         base.Start();
-=======
-    void Start()
-    {
->>>>>>> dab145ddf38863e66cb929fcd217aed8c0dd4978
         _neighborTiles = _tile._neighborTiles;
     }
 
     // Update is called once per frame
-<<<<<<< HEAD
     protected override void Update()
     {
         base.Update();
-=======
-    void Update()
-    {
->>>>>>> dab145ddf38863e66cb929fcd217aed8c0dd4978
         UpdateEfficiency();
         HandleResourceGeneration();
     }

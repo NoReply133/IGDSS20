@@ -11,16 +11,23 @@ public class Worker : MonoBehaviour
 
     public float _age; // The age of this worker
     public float _happiness; // The happiness of this worker
+    private float _timer;
 
     // Start is called before the first frame update
     void Start()
     {
+        _age=0.0f;
     }
 
     // Update is called once per frame
     void Update()
     {
+        _timer += Time.deltaTime;
+        if (_timer >= 15){
+        _timer = 0.0f;
+        _age+=1f;
         Age();
+        };
     }
 
 
