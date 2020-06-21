@@ -4,23 +4,6 @@ using UnityEngine;
 
 public class ProductionBuilding : Building
 {
-    #region Basic Attributes
-    public string _type; //The name of the building
-    public float _upkeep; //The money cost per minute
-    public float _buildCostMoney; //placement money cost
-    public float _buildCostPlanks; //placement planks cost
-    public Tile _tile; //Reference to the tile it is built on
-    private List<Tile> _neighborTiles; //List of all neighboring tiles, derived from _tile
-    #endregion
-
-    #region Tile Restrictions
-    public List<Tile.TileTypes> _canBeBuiltOnTileTypes; //A list that defines all types of tiles it can be placed on. Increase the number in the inspector and then choose from the drop-down menu
-    public Tile.TileTypes _efficiencyScalesWithNeighboringTiles; //Choose if this building should scale with the number of surrounding tiles of a specific type
-    [Range(0, 6)]
-    public int _minimumNeighbors; //The minimum number of surrounding tiles of the specified type required for the building to start working
-    [Range(0, 6)]
-    public int _maximumNeighbors; //The maximum number of surrounding tiles of the specified type this building can scale with. For example, if the maximum is defined as (4) and there are (3) empty tiles of the specified type, the efficiency will be 75%
-    #endregion
 
     #region Resource Generation
     public GameManager.ResourceTypes _inputResource1; //A drop-down in the inspector that declares if this building takes material to generate its output. Optional
@@ -59,7 +42,7 @@ public class ProductionBuilding : Building
     #region Methods
     void UpdateEfficiency()
     {
-        _neighborTiles = _tile._neighborTiles;
+       // _neighborTiles = _tile._neighborTiles;
 
         //If the building scales with neighboring tiles
         if (_minimumNeighbors > 0)

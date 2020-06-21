@@ -107,5 +107,19 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5b250dba97e574fc4bd87f9fcae03705, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _workers: []
+  _type: Farmers Residence
+  _upkeep: 0
+  _buildCostMoney: 0
+  _buildCostPlanks: 0
+  _tile: {fileID: 0}
+  _neighborTiles: []
+  _canBeBuiltOnTileTypes: 030000000400000005000000
+  _efficiencyScalesWithNeighboringTiles: 0
+  _minimumNeighbors: 0
+  _maximumNeighbors: 6
+  _workers:
+  - {fileID: 0}
+  - {fileID: 0}
   _avHappiness: 0
+  _amountOfWorkers: 0
+  _i: 0

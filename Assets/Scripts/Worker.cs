@@ -25,6 +25,8 @@ public class Worker : MonoBehaviour
     void Start()
     {
         _age=0;
+        _happiness = 50;
+        _gameManager._population += 1 ;
     }
 
     // Update is called once per frame
@@ -95,6 +97,7 @@ public class Worker : MonoBehaviour
 
     private void Die()
     {
+        _gameManager._population--;
         Destroy(this.gameObject, 1);
     }
 
