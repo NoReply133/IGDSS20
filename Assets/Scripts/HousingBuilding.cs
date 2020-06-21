@@ -34,7 +34,7 @@ public class HousingBuilding : Building
         float happySum = 0;
         foreach (Worker worker in _workers)
         {
-            happySum += worker._happiness;
+            happySum += (worker._happiness/100);
         }
         return happySum / _workers.Count;
     }
