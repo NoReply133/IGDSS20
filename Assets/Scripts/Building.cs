@@ -21,6 +21,14 @@ public abstract class Building : MonoBehaviour
     // Start is called before the first frame update
     protected virtual void Start()
     {
+        System.Random random = new System.Random();
+        int rand = random.Next(1, 10);
+        for (int i = 0; i < rand; i++)
+        {
+            Job job = new Job(building);
+            _jobs.Add(job);
+            _jobManager.addAvailableJob(job);
+        }
     }
 
     // Update is called once per frame

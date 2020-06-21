@@ -8,6 +8,8 @@ public class JobManager : MonoBehaviour
     private List<Job> _availableJobs = new List<Job>();
     public List<Worker> _unoccupiedWorkers = new List<Worker>();
 
+    private List<Job> _unavailableJobs = new List<Job>();
+
 
 
     #region MonoBehaviour
@@ -29,11 +31,12 @@ public class JobManager : MonoBehaviour
 
     private void HandleUnoccupiedWorkers()
     {
-        if (_unoccupiedWorkers.Count > 0)
+        while ((_unoccupiedWorkers.Count > 0) && (_availableJobs.Count > 0))
         {
-
-            //TODO: What should be done with unoccupied workers?
-
+            _availableJobs[0].AssignWorker(_unoccupiedWorkers[0]);
+            _unavailableJobs.Add(_availableJobs[0]);
+            _availableJobs.RemoveAt(0);
+            _unoccupiedWorkers.RemoveAt(0);
         }
     }
 
@@ -47,6 +50,21 @@ public class JobManager : MonoBehaviour
     public void RemoveWorker(Worker w)
     {
         _unoccupiedWorkers.Remove(w);
+
+        for (int i = 0; i < _unavailableJobs.Count; i++)
+        {
+            if (Equals(_unavailableJobs[i]._worker,w))
+            {
+                _unavailableJobs[i].RemoveWorker(w);
+                _availableJobs.Add(_unavailableJobs[i]);
+                break;
+            }
+        }
+    }
+
+    public void addAvailableJob(Job job)
+    {
+        _availableJobs.Add(job);
     }
 
     #endregion
