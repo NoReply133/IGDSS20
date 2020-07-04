@@ -6,7 +6,7 @@ public class JobManager : MonoBehaviour
 {
     #region Manager References
     public static JobManager Instance; //Singleton of this manager. Can be called with static reference JobManager.Instance
-    GameManager _gameManager; //Reference to GameManager
+    public GameManager _gameManager; //Reference to GameManager
     #endregion
 
     private Dictionary<string, List<Job>> _availableJobsByType = new Dictionary<string, List<Job>>(); //Holds a list of all available jobs for each building _type

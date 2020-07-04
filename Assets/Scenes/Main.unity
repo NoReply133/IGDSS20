@@ -423,9 +423,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 78b0efc6f2d18e447b30856e93bd2388, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _unoccupiedWorkers: []
   _unoccupiedWorkersDisplay: 0
-  _unoccupiedJobsDisplay: 0
 --- !u!1 &1457566342
 GameObject:
   m_ObjectHideFlags: 0
@@ -591,13 +589,13 @@ MonoBehaviour:
   _tileParentObject: {fileID: 140006873}
   _buildingPrefabs:
   - {fileID: 5407459712848412922, guid: 9f7c12318f45cac4891dc4b136bd20fb, type: 3}
-  - {fileID: 7873365932033830391, guid: a1c10ae754bf88c9cae6e7b0895224d2, type: 3}
-  - {fileID: 1559353585060655689, guid: e6a3bfaf1f7371bd99e8dca8ad926c37, type: 3}
-  - {fileID: 3235141735024070201, guid: 70a4f4caf8e4684a68fe5c58426f005b, type: 3}
-  - {fileID: 4560068593944939891, guid: b59e232c1e8b92d5a8007d3cf7c83e4f, type: 3}
-  - {fileID: 2322817482544293233, guid: 6ecac735f1725f883a134007e94b65c4, type: 3}
-  - {fileID: 7246746314511828168, guid: 6854dc051d857023e87ae54d62cc4969, type: 3}
-  - {fileID: 1462309177598299596, guid: 1fd89c361354da5fd9b38bf58175bbde, type: 3}
+  - {fileID: 1559353585060655689, guid: a970fd8743b33144f9f3f2f0f67b84de, type: 3}
+  - {fileID: 3235141735024070201, guid: a259fc1893674f54288b7a1edec58cdb, type: 3}
+  - {fileID: 4560068593944939891, guid: 15ff9dc43be50754b9a15e443319d14b, type: 3}
+  - {fileID: 2322817482544293233, guid: 183fa07205311e94fb89a9ea028b84fa, type: 3}
+  - {fileID: 7246746314511828168, guid: 01e5f3f8e9ef5664bacae09bf0447cd0, type: 3}
+  - {fileID: 1462309177598299596, guid: 05a4909ac0710f744ac886cfbe2089d5, type: 3}
+  - {fileID: 7873365932033830391, guid: 4bfd3146fa08e554da26aab93701df70, type: 3}
   _buildingParentObject: {fileID: 1570219416}
   _selectedBuildingPrefabIndex: 0
   _buildings: []
