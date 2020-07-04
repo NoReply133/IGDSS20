@@ -83,10 +83,11 @@ public class GameManager : MonoBehaviour
     {
         GenerateMap();
         _mouseManager = MouseManager.Instance;
+
         _mouseManager.InitializeBounds(0, _heightMap.width * 10, 0, _heightMap.height * 8.66f);
         _buildings = new List<Building>();
         PopulateResourceDictionary();
-
+        
         AddResourceToWarehouse(ResourceTypes.Fish, 20);
         AddResourceToWarehouse(ResourceTypes.Planks, 20);
     }

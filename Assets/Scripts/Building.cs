@@ -50,8 +50,8 @@ public abstract class Building : MonoBehaviour
             _jobManager.RegisterBuilding(this, _jobs);
         }
 
-        _navigationManager = NavigationManager.Instance;
-        _pathFindingMap = _navigationManager.generateMap(_tile, _jobManager._gameManager);
+    _navigationManager = NavigationManager.Instance;
+    _pathFindingMap = _navigationManager.generateMap(_tile, _jobManager._gameManager);
     }
 
     // Update is called once per frame
