@@ -4,10 +4,9 @@ using UnityEngine;
 
 public class Job
 {
-    public Worker _worker; //The worker occupying this job
-    public Building _building; //The building offering the job
+    public Worker _worker;
+    public Building _building;
 
-    //Constructor. Call new Job(this) from the Building script to instanciate a job
     public Job(Building building)
     {
         _building = building;
@@ -23,5 +22,10 @@ public class Job
     {
         _worker = null;
         _building.WorkerRemovedFromBuilding(w);
+    }
+
+    public bool Occupied()
+    {
+        return _worker != null;
     }
 }
