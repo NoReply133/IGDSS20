@@ -116,7 +116,7 @@ public class Worker : MonoBehaviour
 
     private void Die()
     {
-        _jobManager.RemoveWorker(this);
+        if (_job != null ) {_jobManager.RemoveWorker(this);}
         _home.RemoveWorker(this);
         GameManager.Instance.RemoveWorker(this);
         print("A " + gameObject.name + " has died");
