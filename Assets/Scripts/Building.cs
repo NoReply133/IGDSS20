@@ -6,6 +6,7 @@ public abstract class Building : MonoBehaviour
 {
     #region Manager References
     JobManager _jobManager; //Reference to the JobManager
+    NavigationManager _navigationManager; //Reference to the NavigationManager
     #endregion
 
     #region Basic Attributes
@@ -15,6 +16,7 @@ public abstract class Building : MonoBehaviour
     public float _buildCostPlanks; //placement planks cost
     public Tile _tile; //Reference to the tile it is built on
     protected List<Tile> _neighborTiles; //List of all neighboring tiles, derived from _tile
+    public int[,] _pathFindingMap;
     #endregion
 
     #region Tile Restrictions
@@ -38,13 +40,18 @@ public abstract class Building : MonoBehaviour
         _neighborTiles = _tile._neighborTiles;
         _workers = new List<Worker>();
 
+        // Generate map
+         _jobManager = JobManager.Instance;
 
         if (_availableJobs > 0)
         {
             GenerateJobs();
-            _jobManager = JobManager.Instance;
+           
             _jobManager.RegisterBuilding(this, _jobs);
         }
+
+        _navigationManager = NavigationManager.Instance;
+        _pathFindingMap = _navigationManager.generateMap(_tile, _jobManager._gameManager);
     }
 
     // Update is called once per frame
