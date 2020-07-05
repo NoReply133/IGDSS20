@@ -84,6 +84,7 @@ public class NavigationManager : MonoBehaviour
             foreach ((int, int) oldNext in tilesUpNext)
             {
                 alreadyVisited.Add((oldNext.Item1, oldNext.Item2));
+                tilesUpNextNew.Remove((oldNext.Item1, oldNext.Item2));
             }
 
             tilesUpNext = tilesUpNextNew;
@@ -99,6 +100,17 @@ public class NavigationManager : MonoBehaviour
         list.Add((1,0));
         list.Add((0,-1));
         list.Add((0,1));
+
+        if (field.Item1 % 2 == 0)
+        {
+            list.Add((1,-1));
+            list.Add((-1,-1));  
+        }
+        else
+        {
+            list.Add((1,1));
+            list.Add((-1,1)); 
+        }
 
         List<(int, int)> neighbors = new List<(int, int)>();
 
