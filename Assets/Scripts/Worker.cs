@@ -34,17 +34,13 @@ public class Worker : MonoBehaviour
         _gameManager = GameManager.Instance;
         _worker = GameObject.Find("Worker");
         _nowOnTile = _home._tile;
-  //      _goal = GameObject.Find("Goal").transform;
-
- //         UnityEngine.AI.NavMeshAgent agent = GetComponent<NavMeshAgent>(); // js
- //         agent.destination = goal.position;  // js
     }
 
     // Update is called once per frame
     void Update()
     {
         Age();
-        if (_job != null) {MoveToJob();}
+       if (_job != null) {MoveToJob();}
     }
 
     private void Age()
