@@ -135,12 +135,12 @@ public class Worker : MonoBehaviour
         Destroy(this.gameObject, 1f);
     }
 
-    public void MoveToJob(){
+    public IEnumerator MoveToJob(){
         _Workplace=_job._building;
          int[,] pfm =_Workplace._pathFindingMap;
-
         while (_Workplace._tile != _nowOnTile){
         MoveTo(getNextTile(pfm,_nowOnTile));
+        yield return null;
         }
     }
 
@@ -160,6 +160,7 @@ public class Worker : MonoBehaviour
                 nextTile = _gameManager._tileMap[h,w];
             }
         }
+        print("NowOnTile " + nowOnTile + " nextTile" + nextTile);
         return nextTile;
     }
 
