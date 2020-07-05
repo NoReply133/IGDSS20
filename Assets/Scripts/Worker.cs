@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.AI;
 
 public class Worker : MonoBehaviour
 {
@@ -19,11 +20,14 @@ public class Worker : MonoBehaviour
     private float _agingProgress; //The counter that needs to be incrementally increased during a production cycle
     private bool _becameOfAge = false;
     private bool _retired = false;
+    public Transform goal; // js
 
     // Start is called before the first frame update
     void Start()
     {
         _gameManager = GameManager.Instance;
+          UnityEngine.AI.NavMeshAgent agent = GetComponent<NavMeshAgent>(); // js
+          agent.destination = goal.position;  // js
     }
 
     // Update is called once per frame
