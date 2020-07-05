@@ -13,7 +13,6 @@ GameObject:
   - component: {fileID: 6595276782805596264}
   - component: {fileID: 9004903531293693376}
   - component: {fileID: -4520199577703353544}
-  - component: {fileID: 1486679242528441403}
   m_Layer: 0
   m_Name: Worker
   m_TagString: Untagged
@@ -112,26 +111,7 @@ MonoBehaviour:
   _happiness: 75
   _home: {fileID: 7974565109067665347, guid: 9f7c12318f45cac4891dc4b136bd20fb, type: 3}
   _agingInterval: 15
-  goal: {fileID: 1462309177598299594, guid: a644e03390aff4946ade8e03ffb69f17, type: 3}
---- !u!195 &1486679242528441403
-NavMeshAgent:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4409615396134790654}
-  m_Enabled: 1
-  m_AgentTypeID: 0
-  m_Radius: 0.5
-  m_Speed: 3.5
-  m_Acceleration: 8
-  avoidancePriority: 50
-  m_AngularSpeed: 120
-  m_StoppingDistance: 0
-  m_AutoTraverseOffMeshLink: 1
-  m_AutoBraking: 1
-  m_AutoRepath: 1
-  m_Height: 2
-  m_BaseOffset: 1
-  m_WalkableMask: 4294967295
-  m_ObstacleAvoidanceType: 4
+  _goal: {fileID: 0}
+  speed: 1
+  _worker: {fileID: 0}
+  _nextTile: {fileID: 0}

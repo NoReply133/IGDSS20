@@ -20,20 +20,29 @@ public class Worker : MonoBehaviour
     private float _agingProgress; //The counter that needs to be incrementally increased during a production cycle
     private bool _becameOfAge = false;
     private bool _retired = false;
-    public Transform goal; // js
+
+    public Building _Workplace; // js
+    // Adjust the speed for the movement.
+    public float speed = 1.0f;
+    public GameObject _worker;
+
 
     // Start is called before the first frame update
     void Start()
     {
         _gameManager = GameManager.Instance;
-          UnityEngine.AI.NavMeshAgent agent = GetComponent<NavMeshAgent>(); // js
-          agent.destination = goal.position;  // js
+        _worker = GameObject.Find("Worker");
+  //      _goal = GameObject.Find("Goal").transform;
+
+ //         UnityEngine.AI.NavMeshAgent agent = GetComponent<NavMeshAgent>(); // js
+ //         agent.destination = goal.position;  // js
     }
 
     // Update is called once per frame
     void Update()
     {
         Age();
+        if (_job != null) {MoveToJob();}
     }
 
     private void Age()
@@ -126,5 +135,22 @@ public class Worker : MonoBehaviour
         print("A " + gameObject.name + " has died");
 
         Destroy(this.gameObject, 1f);
+    }
+
+    public void MoveToJob(){
+        _Workplace=_job._Building;
+         int[,] pfm =_Workplace._pathFindingMap;
+    }
+
+    public void MoveTo(Tile t)
+    {
+        Transform tf = t.transform;
+        if (_worker != null) 
+        {
+        float step =  speed * Time.deltaTime; // calculate distance to move
+        // Move our position a step closer to the target:
+        transform.position = Vector3.MoveTowards(_worker.transform.position, tf.position, step);
+        }
+    
     }
 }
