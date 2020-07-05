@@ -138,7 +138,7 @@ public class Worker : MonoBehaviour
     }
 
     public void MoveToJob(){
-        _Workplace=_job._Building;
+        _Workplace=_job._building;
          int[,] pfm =_Workplace._pathFindingMap;
     }
 
