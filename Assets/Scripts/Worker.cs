@@ -40,7 +40,7 @@ public class Worker : MonoBehaviour
     void Update()
     {
        Age();
-       if (_job != null) {MoveToJob();}
+//       if (_job != null) {MoveToJob();}
     }
 
     private void Age()
@@ -96,6 +96,9 @@ public class Worker : MonoBehaviour
     public void AssignToJob(Job job)
     {
         _job = job;
+        _Workplace=job._building;
+        print("I assigned to job" + job._building._type);
+        StartCoroutine("MoveToJob");
     }
 
     public void AssignToHome(HousingBuilding home)
@@ -136,7 +139,6 @@ public class Worker : MonoBehaviour
     }
 
     public IEnumerator MoveToJob(){
-        _Workplace=_job._building;
          int[,] pfm =_Workplace._pathFindingMap;
         while (_Workplace._tile != _nowOnTile){
         MoveTo(getNextTile(pfm));
