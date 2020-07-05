@@ -39,7 +39,7 @@ public class Worker : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        Age();
+       Age();
        if (_job != null) {MoveToJob();}
     }
 
@@ -139,14 +139,14 @@ public class Worker : MonoBehaviour
         _Workplace=_job._building;
          int[,] pfm =_Workplace._pathFindingMap;
         while (_Workplace._tile != _nowOnTile){
-        MoveTo(getNextTile(pfm,_nowOnTile));
+        MoveTo(getNextTile(pfm));
         yield return null;
         }
     }
 
-    public Tile getNextTile (int[,] pfm, Tile nowOnTile)
+    public Tile getNextTile (int[,] pfm)
     {
-        List<Tile> neighbors = nowOnTile._neighborTiles;
+        List<Tile> neighbors = _nowOnTile._neighborTiles;
         
         int nextTileWeight = 2147483647;
         Tile nextTile = _home._tile;
@@ -160,7 +160,7 @@ public class Worker : MonoBehaviour
                 nextTile = _gameManager._tileMap[h,w];
             }
         }
-        print("NowOnTile " + nowOnTile + " nextTile" + nextTile);
+        print("NowOnTile " + _nowOnTile + " nextTile" + nextTile);
         return nextTile;
     }
 
