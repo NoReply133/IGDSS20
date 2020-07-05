@@ -25,6 +25,7 @@ public class Worker : MonoBehaviour
     // Adjust the speed for the movement.
     public float speed = 1.0f;
     public GameObject _worker;
+    public Tile _nowOnTile;
 
 
     // Start is called before the first frame update
@@ -32,6 +33,7 @@ public class Worker : MonoBehaviour
     {
         _gameManager = GameManager.Instance;
         _worker = GameObject.Find("Worker");
+        _nowOnTile = _home._tile;
   //      _goal = GameObject.Find("Goal").transform;
 
  //         UnityEngine.AI.NavMeshAgent agent = GetComponent<NavMeshAgent>(); // js
@@ -140,6 +142,29 @@ public class Worker : MonoBehaviour
     public void MoveToJob(){
         _Workplace=_job._building;
          int[,] pfm =_Workplace._pathFindingMap;
+
+        while (_Workplace._tile != _nowOnTile){
+        MoveTo(getNextTile(pfm,_nowOnTile));
+        }
+    }
+
+    public Tile getNextTile (int[,] pfm, Tile nowOnTile)
+    {
+        List<Tile> neighbors = nowOnTile._neighborTiles;
+        
+        int nextTileWeight = 2147483647;
+        Tile nextTile = _home._tile;
+        
+        foreach (Tile tl in neighbors)
+        {
+           int h = tl._coordinateHeight;
+           int w = tl._coordinateWidth;
+            if (pfm[h,w] < nextTileWeight){
+                nextTileWeight = pfm[h,w];
+                nextTile = _gameManager._tileMap[h,w];
+            }
+        }
+        return nextTile;
     }
 
     public void MoveTo(Tile t)
@@ -150,6 +175,7 @@ public class Worker : MonoBehaviour
         float step =  speed * Time.deltaTime; // calculate distance to move
         // Move our position a step closer to the target:
         transform.position = Vector3.MoveTowards(_worker.transform.position, tf.position, step);
+        _nowOnTile = t;
         }
     
     }
