@@ -35,7 +35,7 @@ public class GameManager : MonoBehaviour
     public int _population; //Number of people available. Currently only one tier of workers
     public GameObject _workerPrefab;
     public Transform _workerParentObject; //Reference to the parent object in the hierarchy for all spawned workers
-    public List<Worker> _workers; // All spawned workers
+    //public List<Worker> _workers; // All spawned workers
     #endregion
 
     #region Resources
@@ -83,13 +83,14 @@ public class GameManager : MonoBehaviour
     {
         GenerateMap();
         _mouseManager = MouseManager.Instance;
-
         _mouseManager.InitializeBounds(0, _heightMap.width * 10, 0, _heightMap.height * 8.66f);
         _buildings = new List<Building>();
         PopulateResourceDictionary();
-        
+
         AddResourceToWarehouse(ResourceTypes.Fish, 20);
         AddResourceToWarehouse(ResourceTypes.Planks, 20);
+
+        SetMapDimensions();
     }
 
     // Update is called once per frame
@@ -404,6 +405,11 @@ public class GameManager : MonoBehaviour
     public void RemoveWorker(Worker w)
     {
         _population--;
+    }
+
+    private void SetMapDimensions()
+    {
+        NavigationManager.Instance.SetDimensions(_tileMap.GetLength(0), _tileMap.GetLength(1));
     }
     #endregion
 }

@@ -1,7 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.AI;
 
 public class Worker : MonoBehaviour
 {
@@ -21,26 +20,26 @@ public class Worker : MonoBehaviour
     private bool _becameOfAge = false;
     private bool _retired = false;
 
-    public Building _Workplace; // js
-    // Adjust the speed for the movement.
-    public float speed = 1.0f;
-    public GameObject _worker;
-    public Tile _nowOnTile;
+    public Tile _navigationTarget;
+    public NavigationManager.Map _currentMap;
+    public bool _currentlyCommuting;
+    public bool _currentlyCommutingHome;
+    public bool _currentlyCommutingToWork;
+    private float _speed = 10.0f;
 
+    public Animator _animator;
 
     // Start is called before the first frame update
     void Start()
     {
         _gameManager = GameManager.Instance;
-        _worker = GameObject.Find("Worker");
-        _nowOnTile = _home._tile;
     }
 
     // Update is called once per frame
     void Update()
     {
-       Age();
-//       if (_job != null) {MoveToJob();}
+        Age();
+        Move();
     }
 
     private void Age()
@@ -70,6 +69,14 @@ public class Worker : MonoBehaviour
         }
     }
 
+    private void Move()
+    {
+        if (_currentlyCommuting)
+        {
+            MoveToNavigationTarget();
+        }
+    }
+
     private void ConsumeResourcesAndCalculateHappiness()
     {
         bool fish = _gameManager.RemoveResourceFromWarehouse(GameManager.ResourceTypes.Fish, 2);
@@ -96,14 +103,13 @@ public class Worker : MonoBehaviour
     public void AssignToJob(Job job)
     {
         _job = job;
-        _Workplace=job._building;
-        print("I assigned to job" + job._building._type);
-        StartCoroutine("MoveToJob");
+        CommuteToWork();
     }
 
     public void AssignToHome(HousingBuilding home)
     {
         _home = home;
+        _navigationTarget = _home._tile;
     }
 
     public void BeBorn()
@@ -130,52 +136,94 @@ public class Worker : MonoBehaviour
 
     private void Die()
     {
-        if (_job != null ) {_jobManager.RemoveWorker(this);}
+        _jobManager.RemoveWorker(this);
         _home.RemoveWorker(this);
         GameManager.Instance.RemoveWorker(this);
         print("A " + gameObject.name + " has died");
 
+        _currentlyCommuting = false;
+        _currentlyCommutingHome = false;
+        _currentlyCommutingToWork = false;
+
         Destroy(this.gameObject, 1f);
     }
 
-    public IEnumerator MoveToJob(){
-         int[,] pfm =_Workplace._pathFindingMap;
-        while (_Workplace._tile != _nowOnTile){
-        MoveTo(getNextTile(pfm));
-        yield return null;
-        }
+    private void CommuteToWork()
+    {
+        _currentMap = _job._building._map;
+        _currentlyCommuting = true;
+        _currentlyCommutingToWork = true;
     }
 
-    public Tile getNextTile (int[,] pfm)
+    private void CommuteHome()
     {
-        List<Tile> neighbors = _nowOnTile._neighborTiles;
-        
-        int nextTileWeight = 2147483647;
-        Tile nextTile = _home._tile;
-        
-        foreach (Tile tl in neighbors)
+        _currentMap = _home._map;
+        _currentlyCommuting = true;
+        _currentlyCommutingHome = true;
+    }
+
+    IEnumerator ArrivedAtWork(float seconds)
+    {
+        yield return new WaitForSeconds(seconds);
+        CommuteHome();
+    }
+
+    IEnumerator ArrivedAtHome(float seconds)
+    {
+        yield return new WaitForSeconds(seconds);
+        CommuteToWork();
+    }
+
+    private void SetNextNavigationTarget(Tile currentTile)
+    {
+        List<Tile> neighbors = currentTile._neighborTiles;
+        Tile bestTile = currentTile;
+        int bestValue = 1000000;
+        for (int i = 0; i < neighbors.Count; i++)
         {
-           int h = tl._coordinateHeight;
-           int w = tl._coordinateWidth;
-            if (pfm[h,w] < nextTileWeight){
-                nextTileWeight = pfm[h,w];
-                nextTile = _gameManager._tileMap[h,w];
+            int currentValue = _currentMap.GetValue(neighbors[i]._coordinateWidth, neighbors[i]._coordinateHeight);
+            if (currentValue < bestValue)
+            {
+                bestTile = neighbors[i];
+                bestValue = currentValue;
             }
         }
-        print("NowOnTile " + _nowOnTile + " nextTile" + nextTile);
-        return nextTile;
+        _navigationTarget = bestTile;
     }
 
-    public void MoveTo(Tile t)
+    private void MoveToNavigationTarget()
     {
-        Transform tf = t.transform;
-        if (_worker != null) 
+        //_animator.Play();
+        float step = _speed * Time.deltaTime; // calculate distance to move
+        transform.LookAt(_navigationTarget.transform);
+        transform.position = Vector3.MoveTowards(transform.position, _navigationTarget.transform.position, step);
+
+        // Check if the position of the cube and sphere are approximately equal.
+        if (Vector3.Distance(transform.position, _navigationTarget.transform.position) < 0.001f)
         {
-        float step =  speed * Time.deltaTime; // calculate distance to move
-        // Move our position a step closer to the target:
-        transform.position = Vector3.MoveTowards(_worker.transform.position, tf.position, step);
-        _nowOnTile = t;
+            ArrivedAtNavigationTarget();
         }
-    
+    }
+
+    private void ArrivedAtNavigationTarget()
+    {
+        if (_currentlyCommutingHome && _navigationTarget == _home._tile)
+        {
+            _currentlyCommuting = false;
+            _currentlyCommutingHome = false;
+            _currentlyCommutingToWork = false;
+            StartCoroutine(ArrivedAtHome(20 + Random.Range(0f, 2f)));
+        }
+        else if (_currentlyCommutingToWork && _navigationTarget == _job._building._tile)
+        {
+            _currentlyCommuting = false;
+            _currentlyCommutingHome = false;
+            _currentlyCommutingToWork = false;
+            StartCoroutine(ArrivedAtWork(20 + Random.Range(0f, 2f)));
+        }
+        else
+        {
+            SetNextNavigationTarget(_navigationTarget);
+        }
     }
 }

@@ -50,10 +50,8 @@ MonoBehaviour:
   _buildCostPlanks: 10
   _tile: {fileID: 0}
   _canBeBuiltOnTileTypes: 030000000400000005000000
+  _numberOfWorkers: 0
   _workers: []
-  _availableJobs: 50
-  _occupiedJobs: 0
-  _efficiency: 0
 --- !u!1001 &64470988583668099
 PrefabInstance:
   m_ObjectHideFlags: 0

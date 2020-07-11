@@ -1,4 +1,4 @@
-using System.Collections;
+﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -6,7 +6,6 @@ public abstract class Building : MonoBehaviour
 {
     #region Manager References
     JobManager _jobManager; //Reference to the JobManager
-    NavigationManager _navigationManager; //Reference to the NavigationManager
     #endregion
 
     #region Basic Attributes
@@ -15,8 +14,7 @@ public abstract class Building : MonoBehaviour
     public float _buildCostMoney; //placement money cost
     public float _buildCostPlanks; //placement planks cost
     public Tile _tile; //Reference to the tile it is built on
-    public List<Tile> _neighborTiles; //List of all neighboring tiles, derived from _tile
-    public int[,] _pathFindingMap;
+    protected List<Tile> _neighborTiles; //List of all neighboring tiles, derived from _tile
     #endregion
 
     #region Tile Restrictions
@@ -33,6 +31,10 @@ public abstract class Building : MonoBehaviour
     public List<Job> _jobs; // List of all available Jobs
     #endregion
 
+    #region Navigation
+    public NavigationManager.Map _map; //The potential fields map that will lead to this building
+    #endregion
+
     #region MonoBehaviour
     // Start is called before the first frame update
     protected virtual void Start()
@@ -40,17 +42,15 @@ public abstract class Building : MonoBehaviour
         _neighborTiles = _tile._neighborTiles;
         _workers = new List<Worker>();
 
-        // Generate map
-         _jobManager = JobManager.Instance;
+        _map = NavigationManager.Instance.GenerateMap(this);
 
         if (_availableJobs > 0)
         {
             GenerateJobs();
-           
+            _jobManager = JobManager.Instance;
             _jobManager.RegisterBuilding(this, _jobs);
         }
 
-    _pathFindingMap = NavigationManager.generateMap(_tile, _jobManager._gameManager);
     }
 
     // Update is called once per frame

@@ -1,141 +1,119 @@
-using System;
-using System.Collections;
+﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
 public class NavigationManager : MonoBehaviour
 {
-    private static Dictionary<Tile.TileTypes, int> _weightValues = new Dictionary<Tile.TileTypes, int>()
-                                            {
-                                                {Tile.TileTypes.Water,30},
-                                                {Tile.TileTypes.Sand, 2},
-                                                {Tile.TileTypes.Grass,1},
-                                                {Tile.TileTypes.Forest,2},
-                                                {Tile.TileTypes.Stone,1},
-                                                {Tile.TileTypes.Mountain,3}
-                                            };
+    #region Manager References
+    public static NavigationManager Instance; //Singleton of this manager. Can be called with static reference NavigationManager.Instance
+    GameManager _gameManager; //Reference to GameManager.Instance
+    #endregion
+
+    int _mapDimensionX;
+    int _mapDimensionY;
+
+    //Awake is called when creating this object
+    private void Awake()
+    {
+        if (Instance)
+        {
+            Destroy(this.gameObject);
+        }
+        else
+        {
+            Instance = this;
+        }
+    }
+
 
     // Start is called before the first frame update
     void Start()
     {
+        _gameManager = GameManager.Instance;
     }
 
     // Update is called once per frame
     void Update()
     {
-        
+
     }
 
-    public static int[,] generateMap(Tile tile, GameManager gameManager)
+    public void SetDimensions(int x, int y)
     {
-        int[,] pathFindingMap = new int[gameManager._heightMap.height, gameManager._heightMap.width];
+        _mapDimensionX = x;
+        _mapDimensionY = y;
+    }
 
-        // each tile is assigned a weight value, depending on its type
-        for (int h = 0; h < gameManager._heightMap.height; h++)
+    public Map GenerateMap(Building b)
+    {
+        Map map = new Map(_mapDimensionX, _mapDimensionY);
+        map.SetValue(b._tile._coordinateWidth, b._tile._coordinateHeight, 0);
+
+        Tile[,] tileMap = _gameManager._tileMap;
+
+        List<Tile> currentlyVisiting = new List<Tile>();
+
+        currentlyVisiting.Add(b._tile);
+
+
+        while (currentlyVisiting.Count > 0)
         {
-            for (int w = 0; w < gameManager._heightMap.width; w++)
+            Tile t = currentlyVisiting[0];
+            List<Tile> neighbors = t._neighborTiles;
+            int currentWeight = map.GetValue(t._coordinateWidth, t._coordinateHeight);
+
+            foreach (Tile neighbor in neighbors)
             {
-                pathFindingMap[h, w] = _weightValues[gameManager._tileMap[h, w]._type];
-            }
-        }
-
-        // The tile the building is standing on however has a weight value of 0. 
-        pathFindingMap[tile._coordinateHeight, tile._coordinateWidth] = 0;
-
-        // From there, recursively take all neighboring tiles and set their weight to the total weight up to this point plus their own weight value. This simulates the ease of travel each tile type allows.
-        List<(int, int)> alreadyVisited = new List<(int, int)> 
-        {
-            (tile._coordinateHeight, tile._coordinateWidth)
-        }; // last visited tiles
-        List<(int, int)> tilesUpNext = determineNeighbors((tile._coordinateHeight, tile._coordinateWidth), gameManager); // tiles visited next
-
-        while (tilesUpNext.Count > 0)
-        {
-            List<(int, int)> tilesUpNextNew = new List<(int, int)>();
-
-            foreach ( (int, int) node in tilesUpNext )
-            {
-                List<(int, int)> neighbors = determineNeighbors(node, gameManager);
-                List<(int, int)> visitedNeighbors = new List<(int, int)>();
-
-                foreach ((int, int) neighbor in neighbors) // determine visited and unvisited neighbors
+                if (map.GetValue(neighbor._coordinateWidth, neighbor._coordinateHeight) == 1000000)
+                //if (map.GetValue(neighbor._coordinateWidth, neighbor._coordinateHeight) > currentWeight + neighbor._navigationWeight)
                 {
-                    if (containsField((neighbor.Item1, neighbor.Item2), alreadyVisited))
-                    {
-                        visitedNeighbors.Add((neighbor.Item1, neighbor.Item2));
-                    }
-                    else {
-                        if (!containsField((neighbor.Item1, neighbor.Item2), tilesUpNextNew))
-                        {
-                            tilesUpNextNew.Add((neighbor.Item1, neighbor.Item2));
-                        }
-                    }
+                    map.SetValue(neighbor._coordinateWidth, neighbor._coordinateHeight, currentWeight + neighbor._navigationWeight);
+                    currentlyVisiting.Add(neighbor);
+
                 }
 
-                if (visitedNeighbors.Count > 1) // use path with less weight
+            }
+
+            currentlyVisiting.RemoveAt(0);
+        }
+
+
+        return map;
+    }
+
+
+    //A wrapper class for a 2D array of weight values
+    public class Map
+    {
+        private int[,] _valueArray; //The 2D array holding all the weight values for each tile
+        public int _dimensionX;
+        public int _dimensionY;
+
+        public Map(int x, int y)
+        {
+            _dimensionX = x;
+            _dimensionY = y;
+
+            _valueArray = new int[_dimensionX, _dimensionY];
+
+            //Initialize array with a high number for each tile
+            for (int i = 0; i < _dimensionX; i++)
+            {
+                for (int j = 0; j < _dimensionY; j++)
                 {
-                    pathFindingMap[node.Item1, node.Item2] = pathFindingMap[node.Item1, node.Item2] + Math.Min(pathFindingMap[visitedNeighbors[0].Item1, visitedNeighbors[0].Item2], pathFindingMap[visitedNeighbors[1].Item1, visitedNeighbors[1].Item2]);   
-                }
-                else if (visitedNeighbors.Count == 1) {
-                    pathFindingMap[node.Item1, node.Item2] = pathFindingMap[node.Item1, node.Item2] + pathFindingMap[visitedNeighbors[0].Item1, visitedNeighbors[0].Item2];
+                    _valueArray[i, j] = 1000000;
                 }
             }
-
-            foreach ((int, int) oldNext in tilesUpNext)
-            {
-                alreadyVisited.Add((oldNext.Item1, oldNext.Item2));
-                tilesUpNextNew.Remove((oldNext.Item1, oldNext.Item2));
-            }
-
-            tilesUpNext = tilesUpNextNew;
         }
 
-        return pathFindingMap;
-    }
-
-    private static List<(int, int)> determineNeighbors((int, int) field, GameManager gameManager)
-    {
-        List<(int, int)> list = new List<(int, int)>();
-        list.Add((-1,0));
-        list.Add((1,0));
-        list.Add((0,-1));
-        list.Add((0,1));
-
-        if (field.Item1 % 2 == 0)
+        public int GetValue(int x, int y)
         {
-            list.Add((1,-1));
-            list.Add((-1,-1));  
+            return _valueArray[x, y];
         }
-        else
+
+        public void SetValue(int x, int y, int value)
         {
-            list.Add((1,1));
-            list.Add((-1,1)); 
+            _valueArray[x, y] = value;
         }
-
-        List<(int, int)> neighbors = new List<(int, int)>();
-
-        foreach ((int,int) x in list)
-        {
-            int nh = field.Item1+x.Item1; // height coordinate of neighbor
-            int nw = field.Item2+x.Item2; // width coordinate of neighbor
-            if (nh >= 0 && nh < gameManager._heightMap.height && nw >= 0 && nw < gameManager._heightMap.width) // if neighbor exists
-            {
-                neighbors.Add((nh, nw));   
-            }
-        }
-
-        return neighbors;   
-    }
-
-    private static bool containsField((int, int) field, List<(int, int)> list)
-    {
-        foreach ((int, int) el in list)
-        {
-            if (field.Item1 == el.Item1 && field.Item2 == el.Item2)
-            {
-                return true;
-            }
-        }
-        return false;  
     }
 }
