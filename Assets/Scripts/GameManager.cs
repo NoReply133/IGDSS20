@@ -229,6 +229,7 @@ public class GameManager : MonoBehaviour
                 Tile t = go.GetComponent<Tile>();
                 t._coordinateHeight = h;
                 t._coordinateWidth = w;
+                t._tile = go;
                 _tileMap[h, w] = t;
             }
         }
@@ -239,14 +240,14 @@ public class GameManager : MonoBehaviour
             for (int w = 0; w < _tileMap.GetLength(1); w++)
             {
                 Tile t = _tileMap[h, w];
-                t._neighborTiles = FindNeighborsOfTile(t);
+                t._neighborTiles = FindNeighborsOfTile(t, _tileMap);
 
             }
         }
     }
 
     //Returns a list of all neighbors of a given tile
-    private List<Tile> FindNeighborsOfTile(Tile t)
+    private List<Tile> FindNeighborsOfTile(Tile t, Tile[,] tileMap)
     {
         List<Tile> result = new List<Tile>();
 
@@ -258,22 +259,22 @@ public class GameManager : MonoBehaviour
         //top
         if (height > 0)
         {
-            result.Add(_tileMap[height - 1, width]);
+            addNeighbor(t, _tileMap[height - 1, width], tileMap, result, (height % 2 == 0) ? "4" : "3");
         }
         //bottom
         if (height < _heightMap.height - 1)
         {
-            result.Add(_tileMap[height + 1, width]);
+            addNeighbor(t, _tileMap[height + 1, width], tileMap, result, (height % 2 == 0) ? "0" : "1");
         }
         //left
         if (width > 0)
         {
-            result.Add(_tileMap[height, width - 1]);
+            addNeighbor(t, _tileMap[height, width - 1], tileMap, result, "2");
         }
         //right
         if (width < _heightMap.width - 1)
         {
-            result.Add(_tileMap[height, width + 1]);
+            addNeighbor(t, _tileMap[height, width + 1], tileMap, result, "5");
         }
 
         //if the column is even
@@ -282,11 +283,11 @@ public class GameManager : MonoBehaviour
         {
             if (height > 0 && width > 0)
             {
-                result.Add(_tileMap[height - 1, width - 1]);
+                addNeighbor(t, _tileMap[height - 1, width - 1], tileMap, result, "3");
             }
             if (height < _heightMap.height - 1 && width > 0)
             {
-                result.Add(_tileMap[height + 1, width - 1]);
+                addNeighbor(t, _tileMap[height + 1, width - 1], tileMap, result, "1");
             }
         }
         //if the column is uneven
@@ -295,15 +296,24 @@ public class GameManager : MonoBehaviour
         {
             if (height > 0 && width < _heightMap.width - 1)
             {
-                result.Add(_tileMap[height - 1, width + 1]);
+                addNeighbor(t, _tileMap[height - 1, width + 1], tileMap, result, "4");
             }
             if (height < _heightMap.height - 1 && width < _heightMap.width - 1)
             {
-                result.Add(_tileMap[height + 1, width + 1]);
+                addNeighbor(t, _tileMap[height + 1, width + 1], tileMap, result, "0");
             }
         }
 
         return result;
+    }
+
+    private void addNeighbor(Tile t, Tile neighbor, Tile[,] tileMap, List<Tile> result, string i)
+    {
+        result.Add(neighbor);
+        if (t._type.Equals(neighbor._type))
+        {
+            t._tile.transform.Find(i).transform.gameObject.SetActive(false);
+        }
     }
 
     //Calculates money income and upkeep when an economy cycle is completed
