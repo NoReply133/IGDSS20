@@ -143,14 +143,6 @@ public class GameManager : MonoBehaviour
         }
     }
 
-    void DoMyWindow(int windowID)
-    {
-        if (GUI.Button(new Rect(10, 20, 100, 20), "Hello World"))
-        {
-            print("Got a click");
-        }
-    }
-
     //Handles the progression within an economy cycle
     void UpdateEconomyTimer()
     {
