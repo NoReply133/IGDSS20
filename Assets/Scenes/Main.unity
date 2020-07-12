@@ -1219,7 +1219,7 @@ GameObject:
   - component: {fileID: 769747522}
   - component: {fileID: 769747521}
   m_Layer: 5
-  m_Name: Panel
+  m_Name: PanelButtons
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1249,7 +1249,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0.5}
   m_AnchorMax: {x: 1, y: 0.5}
-  m_AnchoredPosition: {x: -2, y: -276}
+  m_AnchoredPosition: {x: -2, y: -260}
   m_SizeDelta: {x: 0, y: 649}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &769747521
@@ -2944,7 +2944,7 @@ GameObject:
   - component: {fileID: 1843895317}
   - component: {fileID: 1843895316}
   m_Layer: 5
-  m_Name: Panel
+  m_Name: PanelScores
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2970,7 +2970,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: -410, y: 242}
+  m_AnchoredPosition: {x: -410, y: 231}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1843895316
@@ -3749,7 +3749,7 @@ GameObject:
   - component: {fileID: 2093010680}
   - component: {fileID: 2093010679}
   m_Layer: 5
-  m_Name: Panel
+  m_Name: PanelResoures
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -3785,7 +3785,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 464, y: -160}
+  m_AnchoredPosition: {x: 457, y: -145}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &2093010679
