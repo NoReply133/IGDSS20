@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class GameManager : MonoBehaviour
 {
@@ -42,6 +43,17 @@ public class GameManager : MonoBehaviour
     public int _maximumResourceCountInWarehouse = 100; //How much of each resource can be stored in the global warehouse
     private Dictionary<ResourceTypes, float> _resourcesInWarehouse = new Dictionary<ResourceTypes, float>(); //Holds a number of stored resources for every ResourceType
 
+    // Userinterface
+    public Text _Text_Money; // The display of money
+    public Text _Text_Population; // The display of population
+    // The display of resourcees
+    public Text _Text_Fish ; 
+    public Text _Text_Wood ;
+    public Text _Text_Planks ;
+    public Text _Text_Wool ;
+    public Text _Text_Clothes ;
+    public Text _Text_Potato ;
+    public Text _Text_Schnapps ;
 
     //A representation of _resourcesInWarehouse, broken into individual floats. Only for display in inspector, will be removed and replaced with UI later
     [SerializeField]
@@ -89,7 +101,10 @@ public class GameManager : MonoBehaviour
 
         AddResourceToWarehouse(ResourceTypes.Fish, 20);
         AddResourceToWarehouse(ResourceTypes.Planks, 20);
-
+        // update display of money
+        _Text_Money.text =_money.ToString(); 
+        // update display of population
+        _Text_Population.text = _population.ToString();      
         SetMapDimensions();
     }
 
@@ -122,6 +137,13 @@ public class GameManager : MonoBehaviour
             _economyTimer = 0;
             TickEconomy();
         }
+    }
+
+
+    //Sets the index for the currently selected building prefab by checking UI button presses
+    public void UI_Button_Clicked(int sel)
+    {
+            _selectedBuildingPrefabIndex = sel;
     }
 
     //Sets the index for the currently selected building prefab by checking key presses on the numbers 1 to 0
@@ -159,7 +181,7 @@ public class GameManager : MonoBehaviour
         {
             _selectedBuildingPrefabIndex = 7;
         }
-        else if (Input.GetKeyDown(KeyCode.Alpha9))
+        else if (Input.GetKeyDown(KeyCode.Alpha9)) //Updates the UI
         {
             _selectedBuildingPrefabIndex = 8;
         }
@@ -169,7 +191,7 @@ public class GameManager : MonoBehaviour
         }
     }
 
-    //Updates the visual representation of the resource dictionary in the inspector. Only for debugging
+    //Updates the visual representation of the resource dictionary in the inspector.
     void UpdateInspectorNumbersForResources()
     {
         _ResourcesInWarehouse_Fish = _resourcesInWarehouse[ResourceTypes.Fish];
@@ -179,6 +201,20 @@ public class GameManager : MonoBehaviour
         _ResourcesInWarehouse_Clothes = _resourcesInWarehouse[ResourceTypes.Clothes];
         _ResourcesInWarehouse_Potato = _resourcesInWarehouse[ResourceTypes.Potato];
         _ResourcesInWarehouse_Schnapps = _resourcesInWarehouse[ResourceTypes.Schnapps];
+
+        UpdateTextNumbersForResources() ;//Updates the UI
+    }
+
+        //Updates the UI representation of the resource dictionary
+    void UpdateTextNumbersForResources()
+    {
+        _Text_Fish.text = _resourcesInWarehouse[ResourceTypes.Fish].ToString();
+        _Text_Wood.text = _resourcesInWarehouse[ResourceTypes.Wood].ToString();
+        _Text_Planks.text = _resourcesInWarehouse[ResourceTypes.Planks].ToString();
+        _Text_Wool.text = _resourcesInWarehouse[ResourceTypes.Wool].ToString();
+        _Text_Clothes.text = _resourcesInWarehouse[ResourceTypes.Clothes].ToString();
+        _Text_Potato.text = _resourcesInWarehouse[ResourceTypes.Potato].ToString();
+        _Text_Schnapps.text = _resourcesInWarehouse[ResourceTypes.Schnapps].ToString();
     }
 
     //Instantiates individual hexagonal tile prefabs
@@ -312,7 +348,6 @@ public class GameManager : MonoBehaviour
         //income
         float income = 0;
         income = _population * _IncomePerPerson;
-
         _money += income;
 
         //upkeep
@@ -321,8 +356,10 @@ public class GameManager : MonoBehaviour
         {
             upkeep += _buildings[i]._upkeep;
         }
-
         _money -= upkeep;
+
+        // update display of money
+        _Text_Money.text =_money.ToString(); 
     }
 
     //Is called by MouseManager when a tile was clicked
@@ -354,6 +391,9 @@ public class GameManager : MonoBehaviour
                 _buildings.Add(b);
                 _money -= b._buildCostMoney;
                 _resourcesInWarehouse[ResourceTypes.Planks] -= b._buildCostPlanks;
+                
+                // update display of money
+                _Text_Money.text =_money.ToString();       
             }
 
         }
@@ -399,12 +439,19 @@ public class GameManager : MonoBehaviour
         w.transform.SetParent(_workerParentObject);
         w.AssignToHome(home);
         _population++;
+
+        // update display of population
+        _Text_Population.text = _population.ToString();      
+
         return w;
     }
 
     public void RemoveWorker(Worker w)
     {
         _population--;
+        
+        // update display of population
+        _Text_Population.text = _population.ToString();
     }
 
     private void SetMapDimensions()
