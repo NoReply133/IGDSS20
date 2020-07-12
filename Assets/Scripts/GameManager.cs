@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEditor;
 
 public class GameManager : MonoBehaviour
 {
@@ -114,6 +115,7 @@ public class GameManager : MonoBehaviour
         HandleKeyboardInput();
         UpdateEconomyTimer();
         UpdateInspectorNumbersForResources();
+        UpdateGameStatus();
     }
     #endregion
 
@@ -124,6 +126,28 @@ public class GameManager : MonoBehaviour
         foreach (ResourceTypes type in ResourceTypes.GetValues(typeof(ResourceTypes)))
         {
             _resourcesInWarehouse.Add(type, 0);
+        }
+    }
+
+    void UpdateGameStatus()
+    {
+        if ((_money >= 1000000) || (_population >= 1000))
+        {
+            Time.timeScale = 0;
+            EditorUtility.DisplayDialog("You won!", "Congratulations, you won the game!", "Ok!");
+        }
+        else if (_money == 0)
+        {
+            Time.timeScale = 0;
+            EditorUtility.DisplayDialog("You lost!", "Try again later!", "Ok!");
+        }
+    }
+
+    void DoMyWindow(int windowID)
+    {
+        if (GUI.Button(new Rect(10, 20, 100, 20), "Hello World"))
+        {
+            print("Got a click");
         }
     }
 
